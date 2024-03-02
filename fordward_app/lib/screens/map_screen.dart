@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:fordward_app/screens/home.dart'; // Assuming you have a HomeScreen widget
 import 'package:fordward_app/screens/profile_screen.dart'; // Assuming you have a ProfilePage widget
+import 'package:geolocator/geolocator.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({Key? key}) : super(key: key);
@@ -53,7 +54,7 @@ class _MapState extends State<MapPage> {
             MapBackground(),
             Positioned(
               bottom: 50.0,
-              right: 40.0,
+              left: 10.0,
               child: SizedBox(
                 width: 50.0,
                 height: 50.0,
@@ -61,34 +62,47 @@ class _MapState extends State<MapPage> {
                   onPressed: () {
                     showModalBottomSheet(
                       context: context,
-                      isScrollControlled: true, // Set to true to cover the entire width of the screen
+                      isScrollControlled:
+                          true, // Set to true to cover the entire width of the screen
                       builder: (BuildContext context) {
                         return Container(
                           height: 500,
-                          width: 2000, // Set width to cover the entire width of the screen
-                          child: Center(
-                            child: ElevatedButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.white, // Set button color to yellow
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(100.0),
+                          width:
+                              2000, // Set width to cover the entire width of the screen
+                          child: Column(
+                            children: [
+                              TextField(
+                                decoration: InputDecoration(
+                                  hintText: 'Search...',
+                                  prefixIcon: Icon(Icons.search),
                                 ),
                               ),
-                              child: Text('Close'),
-                            ),
+                              Expanded(
+                                child: ListView.builder(
+                                  itemCount: 20, // Adjust as needed
+                                  itemBuilder: (context, index) {
+                                    return ListTile(
+                                      title: Text('Item $index'),
+                                      onTap: () {
+                                        // Handle item tap
+                                      },
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
                           ),
                         );
                       },
                     );
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF272849), // Set button color to transparent
-                    shape: CircleBorder(), // Make the button circular
+                    backgroundColor: Color(0xFF272849),
+                    shape: CircleBorder(),
+                    padding: EdgeInsets.zero,
                   ),
-                  child: Icon(Icons.add, color: Colors.white), // Display "+" icon in yellow
+                  child: Icon(Icons.add,
+                      color: Colors.white), // Display "+" icon in yellow
                 ),
               ),
             ),
@@ -120,13 +134,40 @@ class _MapState extends State<MapPage> {
   }
 }
 
-class MapBackground extends StatelessWidget {
-  static const LatLng _pGooglePlex = LatLng(45.42196276943317, -75.68190641134954);
+class MapBackground extends StatefulWidget {
+  @override
+  _MapBackgroundState createState() => _MapBackgroundState();
+}
+
+class _MapBackgroundState extends State<MapBackground> {
+  late GoogleMapController mapController;
+  LatLng? currentLocation;
+
+  @override
+  void initState() {
+    super.initState();
+    _getCurrentLocation();
+  }
+
+  void _getCurrentLocation() async {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    setState(() {
+      currentLocation = LatLng(position.latitude, position.longitude);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return GoogleMap(
-      initialCameraPosition: CameraPosition(target: _pGooglePlex, zoom: 14),
+      initialCameraPosition: CameraPosition(
+        target: currentLocation ?? LatLng(0, 0), // Use current location if available, else set to default
+        zoom: 14,
+      ),
+      onMapCreated: (GoogleMapController controller) {
+        mapController = controller;
+      },
+      myLocationEnabled: true,
     );
   }
 }
