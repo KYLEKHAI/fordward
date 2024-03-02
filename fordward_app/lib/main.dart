@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
         title: 'Fordward App',
         theme: ThemeData(
           useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
+          colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFF454768)),
         ),
         home: TitlePage(),
 
