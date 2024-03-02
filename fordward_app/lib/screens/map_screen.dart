@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:fordward_app/screens/map_screen.dart';
+import 'package:fordward_app/screens/home.dart';
 import 'package:fordward_app/screens/profile_screen.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class MapPage extends StatefulWidget {
+  const MapPage({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<MapPage> createState() => _MapState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _MapState extends State<MapPage> {
   // KEEP TRACK OF SELECTED INDEX
-  int _selectedIndex = 0;
+  int _selectedIndex = 1;
 
 // ON TAP FUNCTION
   void _onItemTapped(int index) {
@@ -50,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: Color(0xFF272849),
       body: Center(
-        child: Text('Dashboard', style: TextStyle(color: Colors.white)),
+        child: Text('Map', style: TextStyle(color: Colors.white)),
       ),
 
       // BOTTOM NAVIGATION BAR
