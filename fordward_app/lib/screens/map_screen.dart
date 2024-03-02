@@ -53,7 +53,7 @@ class _MapState extends State<MapPage> {
             MapBackground(),
             Positioned(
               bottom: 50.0,
-              right: 40.0,
+              left: 10.0,
               child: SizedBox(
                 width: 50.0,
                 height: 50.0,
@@ -61,18 +61,21 @@ class _MapState extends State<MapPage> {
                   onPressed: () {
                     showModalBottomSheet(
                       context: context,
-                      isScrollControlled: true, // Set to true to cover the entire width of the screen
+                      isScrollControlled:
+                          true, // Set to true to cover the entire width of the screen
                       builder: (BuildContext context) {
                         return Container(
                           height: 500,
-                          width: 2000, // Set width to cover the entire width of the screen
+                          width:
+                              2000, // Set width to cover the entire width of the screen
                           child: Center(
                             child: ElevatedButton(
                               onPressed: () {
                                 Navigator.pop(context);
                               },
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.white, // Set button color to yellow
+                                backgroundColor:
+                                    Colors.white, // Set button color to yellow
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(100.0),
                                 ),
@@ -85,10 +88,12 @@ class _MapState extends State<MapPage> {
                     );
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF272849), // Set button color to transparent
-                    shape: CircleBorder(), // Make the button circular
+                    backgroundColor: Color(0xFF272849),
+                    shape: CircleBorder(),
+                    padding: EdgeInsets.zero,
                   ),
-                  child: Icon(Icons.add, color: Colors.white), // Display "+" icon in yellow
+                  child: Icon(Icons.add,
+                      color: Colors.white), // Display "+" icon in yellow
                 ),
               ),
             ),
@@ -121,7 +126,8 @@ class _MapState extends State<MapPage> {
 }
 
 class MapBackground extends StatelessWidget {
-  static const LatLng _pGooglePlex = LatLng(45.42196276943317, -75.68190641134954);
+  static const LatLng _pGooglePlex =
+      LatLng(45.42196276943317, -75.68190641134954);
 
   @override
   Widget build(BuildContext context) {
