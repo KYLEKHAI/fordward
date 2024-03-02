@@ -13,7 +13,27 @@ class _ProfileState extends State<ProfilePage> {
   // KEEP TRACK OF SELECTED INDEX
   int _selectedIndex = 2;
 
+  // KEEP TRACK OF SELECTED ITEMS
   List<String> _selectedItems = [];
+
+  // INITIAL SLIDER VALUE
+  double _sliderValue = 0.0;
+
+// SHOW SLIDER DIALOG
+  void _showSliderDialog() async {
+    final double? result = await showDialog<double>(
+      context: context,
+      builder: (BuildContext context) {
+        return SliderDialog(sliderValue: _sliderValue);
+      },
+    );
+
+    if (result != null) {
+      setState(() {
+        _sliderValue = result;
+      });
+    }
+  }
 
   void _showMultiSelectDialog() async {
     final List<String> _items = [
@@ -232,6 +252,54 @@ class _ProfileState extends State<ProfilePage> {
                 },
               ),
             ),
+
+            SizedBox(height: 20),
+
+            // BUTTON FOR SETTING THRESHOLD ON BATTERY TO CHARGE
+            Center(
+              child: ElevatedButton(
+                onPressed: _showSliderDialog,
+                child: Text(
+                  'Battery Threshold',
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
+                style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(buttonColor),
+                  foregroundColor:
+                      MaterialStateProperty.all<Color>(Colors.white),
+                  minimumSize: MaterialStateProperty.all<Size>(Size(150, 60)),
+                ),
+              ),
+            ),
+
+            SizedBox(height: 10),
+
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Container(
+                  width: 300,
+                  padding: const EdgeInsets.all(8.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: buttonColor2,
+                  ),
+                  child: Center(
+                    child: Text(
+                      'Current threshold: ${_sliderValue.toStringAsFixed(0)}%',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -318,6 +386,64 @@ class _MultiSelectDialogState extends State<MultiSelectDialog> {
             );
           }).toList(),
         ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: _onCancelTap,
+          child: Text('Cancel'),
+        ),
+        ElevatedButton(
+          onPressed: _onSubmitTap,
+          child: Text('Submit'),
+        ),
+      ],
+    );
+  }
+}
+
+// SLIDER WIDGET
+
+class SliderDialog extends StatefulWidget {
+  final double sliderValue;
+
+  SliderDialog({required this.sliderValue});
+
+  @override
+  _SliderDialogState createState() => _SliderDialogState();
+}
+
+class _SliderDialogState extends State<SliderDialog> {
+  late double _tempSliderValue;
+
+  @override
+  void initState() {
+    _tempSliderValue = widget.sliderValue;
+    super.initState();
+  }
+
+  void _onCancelTap() {
+    Navigator.pop(context);
+  }
+
+  void _onSubmitTap() {
+    Navigator.pop(context, _tempSliderValue);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text('Set Battery Threshold'),
+      content: Slider(
+        value: _tempSliderValue,
+        min: 0,
+        max: 100,
+        divisions: 100,
+        label: _tempSliderValue.round().toString(),
+        onChanged: (double value) {
+          setState(() {
+            _tempSliderValue = value;
+          });
+        },
       ),
       actions: [
         TextButton(

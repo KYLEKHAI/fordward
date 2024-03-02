@@ -161,7 +161,9 @@ class _MapBackgroundState extends State<MapBackground> {
   Widget build(BuildContext context) {
     return GoogleMap(
       initialCameraPosition: CameraPosition(
-        target: currentLocation ?? LatLng(0, 0), // Use current location if available, else set to default
+        target: currentLocation ??
+            LatLng(
+                0, 0), // Use current location if available, else set to default
         zoom: 14,
       ),
       onMapCreated: (GoogleMapController controller) {
