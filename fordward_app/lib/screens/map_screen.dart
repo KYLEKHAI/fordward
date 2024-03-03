@@ -20,11 +20,12 @@ class _MapState extends State<MapPage> {
   List<AutocompletePrediction> _searchResults = [];
   String? selectedAddress;
   String? currentAddress;
+  bool _isShowingFromToModal = false;
 
   @override
   void initState() {
     super.initState();
-    googlePlace = GooglePlace("YOUR_API_KEY_HERE");
+    googlePlace = GooglePlace("AIzaSyBGNf2LpsgYGANiFn1Erm_a4c-A9p0GN7M");
     _searchController = TextEditingController();
     _searchController.addListener(_onSearchChanged);
     _getCurrentAddress();
@@ -141,135 +142,61 @@ class _MapState extends State<MapPage> {
       context: context,
       isScrollControlled: true,
       builder: (BuildContext context) {
-        return Container(
-          height: 500,
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-          ),
-          child: Column(
-            children: [
-              TextField(
-                key: Key('search_field'),
-                controller: _searchController,
-                decoration: InputDecoration(
-                  hintText: 'Search...',
-                  prefixIcon: Icon(Icons.search, color: Colors.black),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide.none,
-                  ),
-                  filled: true,
-                  fillColor: Color(0xFFE0E0E0),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 15),
-                ),
+        return Stack(
+          children: [
+            Container(
+              height: 500,
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
               ),
-              SizedBox(height: 10),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: _searchResults.length,
-                  itemBuilder: (context, index) {
-                    var place = _searchResults[index];
-                    return ListTile(
-                      title: Text(
-                        place.description!,
-                        style: TextStyle(color: Colors.black),
+              child: Column(
+                children: [
+                  TextField(
+                    key: Key('search_field'),
+                    controller: _searchController,
+                    decoration: InputDecoration(
+                      hintText: 'Search...',
+                      prefixIcon: Icon(Icons.search, color: Colors.black),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide.none,
                       ),
-                      onTap: () {
-                        selectedAddress = place.description!;
-                        Navigator.pop(context, place);
-                        _showFromToModal();
+                      filled: true,
+                      fillColor: Color(0xFFE0E0E0),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 15),
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: _searchResults.length,
+                      itemBuilder: (context, index) {
+                        var place = _searchResults[index];
+                        return ListTile(
+                          title: Text(
+                            place.description!,
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          onTap: () {
+                            selectedAddress = place.description!;
+                            Navigator.pop(context, place);
+                            _showFromToModal();
+                          },
+                        );
                       },
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  void _showFromToModal() {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (BuildContext context) {
-        return Container(
-          decoration: BoxDecoration(
-            color: Colors.transparent,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20.0),
-              topRight: Radius.circular(20.0),
-            ),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                height: 500,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Color(0xFF272849),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20.0),
-                    topRight: Radius.circular(20.0),
+                    ),
                   ),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 20),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Text(
-                        'From: $currentAddress',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Text(
-                        'To: $selectedAddress',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Text(
-                        'Estimated Time: XX min\nDistance: XX km',
-                        style: TextStyle(color: Colors.white, fontSize: 16),
-                      ),
-                    ),
-                    Spacer(),
-                    Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Text(
-                        'Destination: $selectedAddress',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                  ],
-                ),
+                ],
               ),
-              ElevatedButton(
+            ),
+            Positioned(
+              bottom: 20,
+              left: 20,
+              child: ElevatedButton(
                 onPressed: () {
-                  _showSearchModal();
+                  Navigator.pop(context);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,
@@ -281,9 +208,123 @@ class _MapState extends State<MapPage> {
                 ),
                 child: Text('Back'),
               ),
-              SizedBox(height: 20),
-            ],
-          ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showFromToModal() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return WillPopScope(
+              onWillPop: () async {
+                setState(() {
+                  _isShowingFromToModal = false;
+                });
+                return true;
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.transparent,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20.0),
+                    topRight: Radius.circular(20.0),
+                  ),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      height: 500,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: Color(0xFF272849),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20.0),
+                          topRight: Radius.circular(20.0),
+                        ),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 20),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: Text(
+                              'From: $currentAddress',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: Text(
+                              '0 min · 0 km',
+                              style: TextStyle(color: Color.fromARGB(255, 188, 172, 172), fontSize: 16),
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: Text(
+                              '$selectedAddress',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: Text(
+                              'City, Province, Postal Code',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                          Spacer(),
+                          Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.location_on,
+                                  color: Colors.white,
+                                  size: 24,
+                                ),
+                                SizedBox(width: 10),
+                                Text(
+                                  '$selectedAddress',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
         );
       },
     );
