@@ -20,13 +20,14 @@ class _MapState extends State<MapPage> {
   List<AutocompletePrediction> _searchResults = [];
   String? selectedAddress;
   String? currentAddress;
-  List<String> locations = ['123 Main St, Anytown, USA']; 
-  bool _isShowingFromToModal = false;// Placeholder address
+  List<String> locations = ['123 Main St, Anytown, USA']; // Placeholder address
+  bool _isShowingFromToModal = false;
+
 
   @override
   void initState() {
     super.initState();
-    googlePlace = GooglePlace("YOUR_API_KEY_HERE");
+    googlePlace = GooglePlace("AIzaSyBGNf2LpsgYGANiFn1Erm_a4c-A9p0GN7M");
     _searchController = TextEditingController();
     _searchController.addListener(_onSearchChanged);
     _getCurrentAddress();
@@ -109,32 +110,6 @@ class _MapState extends State<MapPage> {
                   padding: EdgeInsets.zero,
                 ),
                 child: Icon(Icons.add, color: Colors.white),
-              ),
-            ),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 50),
-              child: ElevatedButton(
-                onPressed: () {
-                  // Handle sending to car
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                ),
-                child: Text(
-                  'Send to car',
-                  style: TextStyle(
-                    color: Color(0xFF272849),
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
               ),
             ),
           ),
@@ -278,8 +253,12 @@ class _MapState extends State<MapPage> {
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 20),
                             child: Text(
-                              '0 min · 0 km · 0%',
-                              style: TextStyle(color: Color.fromARGB(255, 188, 172, 172), fontSize: 16, fontWeight: FontWeight.bold),
+                              '0 min · 0 km',
+                              style: TextStyle(
+                                color: Color.fromARGB(255, 188, 172, 172),
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                           SizedBox(height: 10),
@@ -336,20 +315,39 @@ class _MapState extends State<MapPage> {
                           bottomRight: Radius.circular(20.0),
                         ),
                       ),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                          _showSearchModal();
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFF272849),
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                              _showSearchModal();
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.transparent,
+                              foregroundColor: Colors.transparent,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                            ),
+                            child: Text('Back', style: TextStyle(color: Colors.white)),
                           ),
-                          padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                        ),
-                        child: Text('Back'),
+                          ElevatedButton(
+                            onPressed: () {
+                              // Send to car functionality
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              foregroundColor: Colors.blue,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                            ),
+                            child: Text('Send to car', style: TextStyle(color: Colors.blue)),
+                          ),
+                        ],
                       ),
                     ),
                     SizedBox(height: 20),
