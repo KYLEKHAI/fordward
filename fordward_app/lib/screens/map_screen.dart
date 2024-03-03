@@ -20,12 +20,9 @@ class _MapState extends State<MapPage> {
   List<AutocompletePrediction> _searchResults = [];
   String? selectedAddress;
   String? currentAddress;
-  List<String> locations = [
-    '123 Main St, Anytown, USA',
-    '456 Park Ave, Somewhere, USA',
-    '789 Broadway, Nowhere, USA'
-  ]; // Placeholder addresses
+  List<String> locations = ['123 Main St, Anytown, USA']; // Placeholder address
   bool _isShowingFromToModal = false;
+
 
   @override
   void initState() {
@@ -264,27 +261,6 @@ class _MapState extends State<MapPage> {
                               ),
                             ),
                           ),
-                          SizedBox(height: 5),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.battery_full,
-                                  color: Colors.white,
-                                  size: 20,
-                                ),
-                                SizedBox(width: 5),
-                                Text(
-                                  '0%',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
                           SizedBox(height: 10),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -298,6 +274,27 @@ class _MapState extends State<MapPage> {
                                 SizedBox(width: 5),
                                 Text(
                                   'From: $currentAddress',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 5),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.battery_full,
+                                  color: Colors.white,
+                                  size: 20,
+                                ),
+                                SizedBox(width: 5),
+                                Text(
+                                  '0%',
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 16,
