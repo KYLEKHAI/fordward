@@ -4,6 +4,7 @@ import 'package:fordward_app/screens/home.dart';
 import 'package:fordward_app/screens/profile_screen.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_place/google_place.dart';
+import 'package:geocoding/geocoding.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({Key? key}) : super(key: key);
@@ -18,18 +19,18 @@ class _MapState extends State<MapPage> {
   late TextEditingController _searchController;
   List<AutocompletePrediction> _searchResults = [];
   String? selectedAddress;
-  PersistentBottomSheetController? _bottomSheetController;
+  String? currentAddress;
 
   @override
   void initState() {
     super.initState();
-    googlePlace = GooglePlace("AIzaSyBGNf2LpsgYGANiFn1Erm_a4c-A9p0GN7M");
-    _searchController = TextEditingController(); // Initialize the controller
+    googlePlace = GooglePlace("YOUR_API_KEY_HERE");
+    _searchController = TextEditingController();
     _searchController.addListener(_onSearchChanged);
+    _getCurrentAddress();
   }
 
   void _onSearchChanged() async {
-    // Delay to avoid too many API requests while typing
     await Future.delayed(Duration(milliseconds: 300));
     _searchPlaces(_searchController.text);
   }
@@ -47,7 +48,6 @@ class _MapState extends State<MapPage> {
         );
         break;
       case 1:
-        // Do nothing, we're already on MapPage
         break;
       case 2:
         Navigator.push(
@@ -69,6 +69,19 @@ class _MapState extends State<MapPage> {
     }
   }
 
+  void _getCurrentAddress() async {
+    Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
+    List<Placemark> placemarks = await placemarkFromCoordinates(
+      position.latitude,
+      position.longitude,
+    );
+    setState(() {
+      currentAddress = placemarks.first.name;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -86,10 +99,7 @@ class _MapState extends State<MapPage> {
               height: 50.0,
               child: ElevatedButton(
                 onPressed: () {
-                  if (_bottomSheetController != null) {
-                    _bottomSheetController!.close();
-                  }
-                  _showSearchModal(); // Show the search modal
+                  _showSearchModal();
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFF272849),
@@ -133,26 +143,26 @@ class _MapState extends State<MapPage> {
       builder: (BuildContext context) {
         return Container(
           height: 500,
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10), // Added padding
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20)), // Rounded top corners
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
           ),
           child: Column(
             children: [
               TextField(
-                key: Key('search_field'), // Add key
+                key: Key('search_field'),
                 controller: _searchController,
                 decoration: InputDecoration(
                   hintText: 'Search...',
-                  prefixIcon: Icon(Icons.search, color: Colors.black), // Icon color
-                  border: OutlineInputBorder( // Added border
+                  prefixIcon: Icon(Icons.search, color: Colors.black),
+                  border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                     borderSide: BorderSide.none,
                   ),
-                  filled: true, // Fill color
-                  fillColor: Color(0xFFE0E0E0), // Fill color
-                  contentPadding: EdgeInsets.symmetric(horizontal: 15), // Padding
+                  filled: true,
+                  fillColor: Color(0xFFE0E0E0),
+                  contentPadding: EdgeInsets.symmetric(horizontal: 15),
                 ),
               ),
               SizedBox(height: 10),
@@ -164,13 +174,12 @@ class _MapState extends State<MapPage> {
                     return ListTile(
                       title: Text(
                         place.description!,
-                        style: TextStyle(color: Colors.black), // Text color
+                        style: TextStyle(color: Colors.black),
                       ),
                       onTap: () {
-                        // Handle selection of place
                         selectedAddress = place.description!;
                         Navigator.pop(context, place);
-                        _showFromToModal(); // Show the "From" and "To" modal
+                        _showFromToModal();
                       },
                     );
                   },
@@ -210,41 +219,74 @@ class _MapState extends State<MapPage> {
                   ),
                 ),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(height: 20),
-                    Text(
-                      'From: Current Location',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Text(
+                        'From: $currentAddress',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Text(
+                        'To: $selectedAddress',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Text(
+                        'Estimated Time: XX min\nDistance: XX km',
+                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      ),
+                    ),
+                    Spacer(),
+                    Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Text(
+                        'Destination: $selectedAddress',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                        ),
                       ),
                     ),
                     SizedBox(height: 20),
-                    Text(
-                      'To: $selectedAddress',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context); // Close the current bottom sheet
-                        _showSearchModal(); // Show the search modal
-                      },
-                      child: Text('Back'),
-                    ),
                   ],
                 ),
               ),
+              ElevatedButton(
+                onPressed: () {
+                  _showSearchModal();
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: Colors.black,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                ),
+                child: Text('Back'),
+              ),
+              SizedBox(height: 20),
             ],
           ),
         );
       },
-    ).then((value) {
-      _bottomSheetController = value;
-    });
+    );
   }
 }
 
