@@ -157,7 +157,7 @@ class _MapState extends State<MapPage> {
                     key: Key('search_field'),
                     controller: _searchController,
                     decoration: InputDecoration(
-                      hintText: 'Search...',
+                      hintText: 'Search',
                       prefixIcon: Icon(Icons.search, color: Colors.black),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -181,7 +181,7 @@ class _MapState extends State<MapPage> {
                           ),
                           onTap: () {
                             selectedAddress = place.description!;
-                            Navigator.pop(context, place);
+                            Navigator.pop(context);
                             _showFromToModal();
                           },
                         );
@@ -189,24 +189,6 @@ class _MapState extends State<MapPage> {
                     ),
                   ),
                 ],
-              ),
-            ),
-            Positioned(
-              bottom: 20,
-              left: 20,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  foregroundColor: Colors.black,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                ),
-                child: Text('Back'),
               ),
             ),
           ],
@@ -257,7 +239,7 @@ class _MapState extends State<MapPage> {
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 20),
                             child: Text(
-                              'From: $currentAddress',
+                              '$selectedAddress',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 20,
@@ -276,23 +258,22 @@ class _MapState extends State<MapPage> {
                           SizedBox(height: 10),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 20),
-                            child: Text(
-                              '$selectedAddress',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 10),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            child: Text(
-                              'City, Province, Postal Code',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                              ),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.circle,
+                                  color: Colors.white,
+                                  size: 10,
+                                ),
+                                SizedBox(width: 5),
+                                Text(
+                                  'From: $currentAddress',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                           Spacer(),
@@ -307,7 +288,7 @@ class _MapState extends State<MapPage> {
                                 ),
                                 SizedBox(width: 10),
                                 Text(
-                                  '$selectedAddress',
+                                  'Destination: $selectedAddress',
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 16,
@@ -320,6 +301,22 @@ class _MapState extends State<MapPage> {
                         ],
                       ),
                     ),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        _showSearchModal();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        foregroundColor: Colors.black,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                      ),
+                      child: Text('Back'),
+                    ),
+                    SizedBox(height: 20),
                   ],
                 ),
               ),
