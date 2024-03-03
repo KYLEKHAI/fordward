@@ -22,16 +22,15 @@ class _MapState extends State<MapPage> {
   String? currentAddress;
   List<String> locations = [
     '123 Main St, Anytown, USA',
-    '456 Oak Ave, Othertown, USA',
-    '789 Elm St, Another town, USA'
+    '456 Park Ave, Somewhere, USA',
+    '789 Broadway, Nowhere, USA'
   ]; // Placeholder addresses
   bool _isShowingFromToModal = false;
 
   @override
   void initState() {
     super.initState();
-    googlePlace =
-        GooglePlace("AIzaSyBGNf2LpsgYGANiFn1Erm_a4c-A9p0GN7M");
+    googlePlace = GooglePlace("AIzaSyBGNf2LpsgYGANiFn1Erm_a4c-A9p0GN7M");
     _searchController = TextEditingController();
     _searchController.addListener(_onSearchChanged);
     _getCurrentAddress();
@@ -265,6 +264,7 @@ class _MapState extends State<MapPage> {
                               ),
                             ),
                           ),
+                          SizedBox(height: 5),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 20),
                             child: Row(
