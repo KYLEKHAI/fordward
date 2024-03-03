@@ -31,7 +31,7 @@ class _MapState extends State<MapPage> {
   void initState() {
     super.initState();
     googlePlace =
-        GooglePlace("YOUR_API_KEY_HERE");
+        GooglePlace("AIzaSyBGNf2LpsgYGANiFn1Erm_a4c-A9p0GN7M");
     _searchController = TextEditingController();
     _searchController.addListener(_onSearchChanged);
     _getCurrentAddress();
