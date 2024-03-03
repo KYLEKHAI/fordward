@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "931697313234",
+    "project_id": "fordward-b6c48",
+    "storage_bucket": "fordward-b6c48.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:931697313234:android:3aeb53e7ac24d8df50340b",
+        "android_client_info": {
+          "package_name": "com.example.fordward_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvCvysHE5ppSBpUGdh1FLvwBxRRkyQpo4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
