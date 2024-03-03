@@ -18,11 +18,12 @@ class _MapState extends State<MapPage> {
   late TextEditingController _searchController;
   List<AutocompletePrediction> _searchResults = [];
   String? selectedAddress;
+  PersistentBottomSheetController? _bottomSheetController;
 
   @override
   void initState() {
     super.initState();
-    googlePlace = GooglePlace("AIzaSyBGNf2LpsgYGANiFn1Erm_a4c-A9p0GN7M");
+    googlePlace = GooglePlace("YOUR_API_KEY_HERE");
     _searchController = TextEditingController(); // Initialize the controller
     _searchController.addListener(_onSearchChanged);
   }
@@ -85,6 +86,9 @@ class _MapState extends State<MapPage> {
               height: 50.0,
               child: ElevatedButton(
                 onPressed: () {
+                  if (_bottomSheetController != null) {
+                    _bottomSheetController!.close();
+                  }
                   showModalBottomSheet(
                     context: context,
                     isScrollControlled: true,
@@ -112,54 +116,40 @@ class _MapState extends State<MapPage> {
                               ),
                               child: Column(
                                 children: [
-                                  TextField(
-                                    key: Key('search_field'), // Add key
-                                    controller: _searchController,
-                                    decoration: InputDecoration(
-                                      hintText: 'Search...',
-                                      prefixIcon:
-                                          Icon(Icons.search, color: Colors.white),
-                                      hintStyle: TextStyle(color: Colors.white),
+                                  SizedBox(height: 20),
+                                  Text(
+                                    'From: Current Location',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
                                     ),
                                   ),
-                                  Expanded(
-                                    child: ListView.builder(
-                                      itemCount: _searchResults.length,
-                                      itemBuilder: (context, index) {
-                                        var place = _searchResults[index];
-                                        return ListTile(
-                                          title: DefaultTextStyle(
-                                            style: TextStyle(color: Colors.white),
-                                            child: Text(place.description!),
-                                          ),
-                                          onTap: () {
-                                            // Handle selection of place
-                                            setState(() {
-                                              selectedAddress = place.description;
-                                            });
-                                            Navigator.pop(context);
-                                          },
-                                        );
-                                      },
+                                  SizedBox(height: 20),
+                                  Text(
+                                    'To: $selectedAddress',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
                                     ),
+                                  ),
+                                  SizedBox(height: 20),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.pop(context); // Close the current bottom sheet
+                                      _showSearchModal(); // Show the search modal
+                                    },
+                                    child: Text('Back'),
                                   ),
                                 ],
                               ),
                             ),
-                            if (selectedAddress != null)
-                              Container(
-                                color: Colors.grey[300],
-                                padding: EdgeInsets.all(20.0),
-                                child: Text(
-                                  selectedAddress!,
-                                  style: TextStyle(fontSize: 18.0),
-                                ),
-                              ),
                           ],
                         ),
                       );
                     },
-                  );
+                  ).then((value) {
+                    _bottomSheetController = value;
+                  });
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFF272849),
@@ -193,6 +183,62 @@ class _MapState extends State<MapPage> {
           ),
         ],
       ),
+    );
+  }
+
+  void _showSearchModal() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return Container(
+          height: 500,
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10), // Added padding
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)), // Rounded top corners
+          ),
+          child: Column(
+            children: [
+              TextField(
+                key: Key('search_field'), // Add key
+                controller: _searchController,
+                decoration: InputDecoration(
+                  hintText: 'Search...',
+                  prefixIcon: Icon(Icons.search, color: Colors.black), // Icon color
+                  border: OutlineInputBorder( // Added border
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide.none,
+                  ),
+                  filled: true, // Fill color
+                  fillColor: Color(0xFFE0E0E0), // Fill color
+                  contentPadding: EdgeInsets.symmetric(horizontal: 15), // Padding
+                ),
+              ),
+              SizedBox(height: 10),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: _searchResults.length,
+                  itemBuilder: (context, index) {
+                    var place = _searchResults[index];
+                    return ListTile(
+                      title: Text(
+                        place.description!,
+                        style: TextStyle(color: Colors.black), // Text color
+                      ),
+                      onTap: () {
+                        // Handle selection of place
+                        selectedAddress = place.description!;
+                        Navigator.pop(context, place);
+                      },
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
