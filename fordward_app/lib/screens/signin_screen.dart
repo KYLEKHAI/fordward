@@ -110,13 +110,13 @@ class _SignInScreenState extends State<SignInScreen> {
             child: ElevatedButton(
               onPressed: () {
 
-                //FirebaseAuth.instance.signInWithEmailAndPassword(email: emailController.text, password: passwordController.text).then((value){
+                FirebaseAuth.instance.signInWithEmailAndPassword(email: emailController.text, password: passwordController.text).then((value){
                   // GO TO HOME SCREEN
                   Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => HomeScreen()),
-                );
-                //});
+                    context,
+                    MaterialPageRoute(builder: (context) => HomeScreen()),
+                  );
+                }).onError((error, stackTrace) => null);
                 
 
               },
