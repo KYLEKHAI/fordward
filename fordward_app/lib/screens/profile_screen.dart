@@ -19,6 +19,67 @@ class _ProfileState extends State<ProfilePage> {
   // INITIAL SLIDER VALUE
   double _sliderValue = 0.0;
 
+  // VARIABLE FOR CAR MODEL
+  String? _carModel;
+
+// FUNCTION TO SHOW DIALOG FOR SELECTING CAR MODEL
+  void _showCarModelDialog() async {
+    String? tempCarModel = _carModel;
+    final String? selectedModel = await showDialog<String>(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: Text('Select Car Model'),
+              content: Container(
+                height: 150.0,
+                child: Column(
+                  children: <Widget>[
+                    RadioListTile<String>(
+                      title: const Text('Ford F-150'),
+                      value: 'Ford F-150',
+                      groupValue: tempCarModel,
+                      onChanged: (String? value) {
+                        setState(() {
+                          tempCarModel = value;
+                        });
+                      },
+                    ),
+                    RadioListTile<String>(
+                      title: const Text('Mustang Mach-E'),
+                      value: 'Mustang Mach-E',
+                      groupValue: tempCarModel,
+                      onChanged: (String? value) {
+                        setState(() {
+                          tempCarModel = value;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop(tempCarModel);
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+
+    if (selectedModel != null) {
+      setState(() {
+        _carModel = selectedModel;
+      });
+    }
+  }
+
 // SHOW SLIDER DIALOG
   void _showSliderDialog() async {
     final double? result = await showDialog<double>(
@@ -102,7 +163,7 @@ class _ProfileState extends State<ProfilePage> {
         automaticallyImplyLeading: false,
 
         title: Text(
-          "PROFILE",
+          "Profile",
           style: TextStyle(
             fontSize: 35,
             fontWeight: FontWeight.bold,
@@ -127,7 +188,7 @@ class _ProfileState extends State<ProfilePage> {
                 color: Colors.white,
               ),
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 15),
 
             // DISPLAY USER NAME
             Positioned(
@@ -152,7 +213,7 @@ class _ProfileState extends State<ProfilePage> {
               ),
             ),
 
-            SizedBox(height: 30),
+            SizedBox(height: 20),
 
             Text(
               "Email",
@@ -163,7 +224,7 @@ class _ProfileState extends State<ProfilePage> {
               ),
             ),
 
-            SizedBox(height: 20),
+            SizedBox(height: 15),
 
             // DISPLAY USER EMAIL
             Positioned(
@@ -188,7 +249,7 @@ class _ProfileState extends State<ProfilePage> {
               ),
             ),
 
-            SizedBox(height: 40),
+            SizedBox(height: 25),
 
             // MY PREFERENCES BUTTON
             Center(
@@ -220,7 +281,7 @@ class _ProfileState extends State<ProfilePage> {
               ),
             ),
 
-            SizedBox(height: 20),
+            SizedBox(height: 15),
             // DISPLAY SELECTED PREFERENCES
             Container(
               height: 70,
@@ -253,7 +314,7 @@ class _ProfileState extends State<ProfilePage> {
               ),
             ),
 
-            SizedBox(height: 20),
+            SizedBox(height: 15),
 
             // BUTTON FOR SETTING THRESHOLD ON BATTERY TO CHARGE
             Center(
@@ -297,6 +358,28 @@ class _ProfileState extends State<ProfilePage> {
                       ),
                     ),
                   ),
+                ),
+              ),
+            ),
+
+            SizedBox(height: 10),
+
+            // BUTTON FOR SETTING CAR MODEL
+            Center(
+              child: ElevatedButton(
+                onPressed: _showCarModelDialog,
+                child: Text(
+                  'Car Model',
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
+                style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(buttonColor),
+                  foregroundColor:
+                      MaterialStateProperty.all<Color>(Colors.white),
+                  minimumSize: MaterialStateProperty.all<Size>(Size(150, 60)),
                 ),
               ),
             ),
@@ -433,17 +516,20 @@ class _SliderDialogState extends State<SliderDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text('Set Battery Threshold'),
-      content: Slider(
-        value: _tempSliderValue,
-        min: 0,
-        max: 100,
-        divisions: 100,
-        label: _tempSliderValue.round().toString(),
-        onChanged: (double value) {
-          setState(() {
-            _tempSliderValue = value;
-          });
-        },
+      content: Container(
+        height: 150.0, // Set the height here
+        child: Slider(
+          value: _tempSliderValue,
+          min: 0,
+          max: 100,
+          divisions: 100,
+          label: _tempSliderValue.round().toString(),
+          onChanged: (double value) {
+            setState(() {
+              _tempSliderValue = value;
+            });
+          },
+        ),
       ),
       actions: [
         TextButton(
