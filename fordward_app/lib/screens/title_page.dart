@@ -1,6 +1,5 @@
 // IMPORT PACKAGES TO INCLUDE PREMADE WIDGETS AND UTILITIES
 import 'package:flutter/material.dart';
-import 'package:fordward_app/utils/color_utils.dart';
 import 'package:fordward_app/screens/signup_screen.dart';
 import 'package:fordward_app/screens/signin_screen.dart';
 

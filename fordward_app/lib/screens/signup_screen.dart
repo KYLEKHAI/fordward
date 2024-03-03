@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fordward_app/screens/title_page.dart';
 
@@ -159,11 +160,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
             right: 20,
             child: ElevatedButton(
               onPressed: () {
-                // GO TO HOME SCREEN
-                Navigator.push(
+
+                FirebaseAuth.instance.createUserWithEmailAndPassword(email: emailController.text, password: passwordController.text).then((value){
+                   Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => TitlePage()),
                 );
+                }).onError((error, stackTrace) => null)
+                ;
+
+                
+                // GO TO HOME SCREEN
+                /*Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => TitlePage()),
+                );
+                */
               },
 
               // BUTTON STYLES
