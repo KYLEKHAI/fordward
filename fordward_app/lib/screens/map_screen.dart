@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:fordward_app/screens/home.dart'; // Assuming you have a HomeScreen widget
-import 'package:fordward_app/screens/profile_screen.dart'; // Assuming you have a ProfilePage widget
+import 'package:fordward_app/screens/home.dart'; 
+import 'package:fordward_app/screens/profile_screen.dart'; 
 import 'package:geolocator/geolocator.dart';
 import 'package:google_place/google_place.dart';
 
@@ -21,8 +21,8 @@ class _MapState extends State<MapPage> {
   @override
   void initState() {
     super.initState();
-    googlePlace = GooglePlace("YOUR_GOOGLE_PLACES_API_KEY_HERE");
-    _searchController = TextEditingController();
+    googlePlace = GooglePlace("AIzaSyBGNf2LpsgYGANiFn1Erm_a4c-A9p0GN7M");
+    _searchController = TextEditingController(); // Initialize the controller
     _searchController.addListener(_onSearchChanged);
   }
 
@@ -96,23 +96,20 @@ class _MapState extends State<MapPage> {
                           child: Column(
                             children: [
                               TextField(
+                                key: Key('search_field'), // Add key
                                 controller: _searchController,
-                                onChanged: (value) {
-                                  _searchPlaces(value); // Trigger search when text changes
-                                },
                                 decoration: InputDecoration(
-                                  hintText: 'Search places...',
+                                  hintText: 'Search...',
                                   prefixIcon: Icon(Icons.search),
                                 ),
                               ),
                               Expanded(
                                 child: ListView.builder(
-                                  shrinkWrap: true,
                                   itemCount: _searchResults.length,
                                   itemBuilder: (context, index) {
                                     var place = _searchResults[index];
                                     return ListTile(
-                                      title: Text(place.description ?? ''),
+                                      title: Text(place.description!),
                                       onTap: () {
                                         // Handle selection of place
                                         Navigator.pop(context, place);
