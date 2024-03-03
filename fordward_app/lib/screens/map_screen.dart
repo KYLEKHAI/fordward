@@ -23,7 +23,7 @@ class _MapState extends State<MapPage> {
   @override
   void initState() {
     super.initState();
-    googlePlace = GooglePlace("YOUR_API_KEY_HERE");
+    googlePlace = GooglePlace("AIzaSyBGNf2LpsgYGANiFn1Erm_a4c-A9p0GN7M");
     _searchController = TextEditingController(); // Initialize the controller
     _searchController.addListener(_onSearchChanged);
   }
@@ -89,67 +89,7 @@ class _MapState extends State<MapPage> {
                   if (_bottomSheetController != null) {
                     _bottomSheetController!.close();
                   }
-                  showModalBottomSheet(
-                    context: context,
-                    isScrollControlled: true,
-                    builder: (BuildContext context) {
-                      return Container(
-                        decoration: BoxDecoration(
-                          color: Colors.transparent,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(20.0),
-                            topRight: Radius.circular(20.0),
-                          ),
-                        ),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Container(
-                              height: 500,
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                color: Color(0xFF272849),
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(20.0),
-                                  topRight: Radius.circular(20.0),
-                                ),
-                              ),
-                              child: Column(
-                                children: [
-                                  SizedBox(height: 20),
-                                  Text(
-                                    'From: Current Location',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                  SizedBox(height: 20),
-                                  Text(
-                                    'To: $selectedAddress',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                  SizedBox(height: 20),
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      Navigator.pop(context); // Close the current bottom sheet
-                                      _showSearchModal(); // Show the search modal
-                                    },
-                                    child: Text('Back'),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ).then((value) {
-                    _bottomSheetController = value;
-                  });
+                  _showSearchModal(); // Show the search modal
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFF272849),
@@ -230,6 +170,7 @@ class _MapState extends State<MapPage> {
                         // Handle selection of place
                         selectedAddress = place.description!;
                         Navigator.pop(context, place);
+                        _showFromToModal(); // Show the "From" and "To" modal
                       },
                     );
                   },
@@ -240,6 +181,70 @@ class _MapState extends State<MapPage> {
         );
       },
     );
+  }
+
+  void _showFromToModal() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return Container(
+          decoration: BoxDecoration(
+            color: Colors.transparent,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20.0),
+              topRight: Radius.circular(20.0),
+            ),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                height: 500,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Color(0xFF272849),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20.0),
+                    topRight: Radius.circular(20.0),
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    SizedBox(height: 20),
+                    Text(
+                      'From: Current Location',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    Text(
+                      'To: $selectedAddress',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context); // Close the current bottom sheet
+                        _showSearchModal(); // Show the search modal
+                      },
+                      child: Text('Back'),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    ).then((value) {
+      _bottomSheetController = value;
+    });
   }
 }
 
