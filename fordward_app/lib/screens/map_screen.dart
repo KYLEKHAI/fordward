@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:fordward_app/screens/home.dart'; 
-import 'package:fordward_app/screens/profile_screen.dart'; 
+import 'package:fordward_app/screens/home.dart';
+import 'package:fordward_app/screens/profile_screen.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_place/google_place.dart';
 
@@ -17,6 +17,7 @@ class _MapState extends State<MapPage> {
   late GooglePlace googlePlace;
   late TextEditingController _searchController;
   List<AutocompletePrediction> _searchResults = [];
+  String? selectedAddress;
 
   @override
   void initState() {
@@ -69,93 +70,128 @@ class _MapState extends State<MapPage> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Map Page'),
       ),
-      home: Scaffold(
-        backgroundColor: Color(0xFF272849),
-        body: Stack(
-          children: [
-            MapBackground(),
-            Positioned(
-              bottom: 50.0,
-              left: 10.0,
-              child: SizedBox(
-                width: 50.0,
-                height: 50.0,
-                child: ElevatedButton(
-                  onPressed: () {
-                    showModalBottomSheet(
-                      context: context,
-                      isScrollControlled: true,
-                      builder: (BuildContext context) {
-                        return Container(
-                          height: 500,
-                          width: double.infinity,
-                          child: Column(
-                            children: [
-                              TextField(
-                                key: Key('search_field'), // Add key
-                                controller: _searchController,
-                                decoration: InputDecoration(
-                                  hintText: 'Search...',
-                                  prefixIcon: Icon(Icons.search),
-                                ),
-                              ),
-                              Expanded(
-                                child: ListView.builder(
-                                  itemCount: _searchResults.length,
-                                  itemBuilder: (context, index) {
-                                    var place = _searchResults[index];
-                                    return ListTile(
-                                      title: Text(place.description!),
-                                      onTap: () {
-                                        // Handle selection of place
-                                        Navigator.pop(context, place);
-                                      },
-                                    );
-                                  },
-                                ),
-                              ),
-                            ],
+      body: Stack(
+        children: [
+          MapBackground(),
+          Positioned(
+            bottom: 50.0,
+            left: 10.0,
+            child: SizedBox(
+              width: 50.0,
+              height: 50.0,
+              child: ElevatedButton(
+                onPressed: () {
+                  showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    builder: (BuildContext context) {
+                      return Container(
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(20.0),
+                            topRight: Radius.circular(20.0),
                           ),
-                        );
-                      },
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF272849),
-                    shape: CircleBorder(),
-                    padding: EdgeInsets.zero,
-                  ),
-                  child: Icon(Icons.add, color: Colors.white),
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              height: 500,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: Color(0xFF272849),
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(20.0),
+                                  topRight: Radius.circular(20.0),
+                                ),
+                              ),
+                              child: Column(
+                                children: [
+                                  TextField(
+                                    key: Key('search_field'), // Add key
+                                    controller: _searchController,
+                                    decoration: InputDecoration(
+                                      hintText: 'Search...',
+                                      prefixIcon:
+                                          Icon(Icons.search, color: Colors.white),
+                                      hintStyle: TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: ListView.builder(
+                                      itemCount: _searchResults.length,
+                                      itemBuilder: (context, index) {
+                                        var place = _searchResults[index];
+                                        return ListTile(
+                                          title: DefaultTextStyle(
+                                            style: TextStyle(color: Colors.white),
+                                            child: Text(place.description!),
+                                          ),
+                                          onTap: () {
+                                            // Handle selection of place
+                                            setState(() {
+                                              selectedAddress = place.description;
+                                            });
+                                            Navigator.pop(context);
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            if (selectedAddress != null)
+                              Container(
+                                color: Colors.grey[300],
+                                padding: EdgeInsets.all(20.0),
+                                child: Text(
+                                  selectedAddress!,
+                                  style: TextStyle(fontSize: 18.0),
+                                ),
+                              ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFF272849),
+                  shape: CircleBorder(),
+                  padding: EdgeInsets.zero,
                 ),
+                child: Icon(Icons.add, color: Colors.white),
               ),
             ),
-          ],
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Color(0xFF4D5074),
-          selectedItemColor: Color(0xFF6ADED7),
-          unselectedItemColor: Colors.white,
-          currentIndex: _selectedIndex,
-          onTap: _onItemTapped,
-          items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.dashboard),
-              label: 'Dashboard',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.map),
-              label: 'Map',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle),
-              label: 'Profile',
-            ),
-          ],
-        ),
+          ),
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Color(0xFF4D5074),
+        selectedItemColor: Color(0xFF6ADED7),
+        unselectedItemColor: Colors.white,
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+        items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.dashboard),
+            label: 'Dashboard',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.map),
+            label: 'Map',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.account_circle),
+            label: 'Profile',
+          ),
+        ],
       ),
     );
   }
@@ -169,6 +205,7 @@ class MapBackground extends StatefulWidget {
 class _MapBackgroundState extends State<MapBackground> {
   late GoogleMapController mapController;
   LatLng? currentLocation;
+  Set<Marker> _markers = {};
 
   @override
   void initState() {
@@ -178,7 +215,8 @@ class _MapBackgroundState extends State<MapBackground> {
 
   void _getCurrentLocation() async {
     Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
+      desiredAccuracy: LocationAccuracy.high,
+    );
     setState(() {
       currentLocation = LatLng(position.latitude, position.longitude);
     });
@@ -195,6 +233,7 @@ class _MapBackgroundState extends State<MapBackground> {
         mapController = controller;
       },
       myLocationEnabled: true,
+      markers: _markers,
     );
   }
 }
