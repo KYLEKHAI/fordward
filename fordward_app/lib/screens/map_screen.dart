@@ -3,6 +3,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:fordward_app/screens/home.dart'; // Assuming you have a HomeScreen widget
 import 'package:fordward_app/screens/profile_screen.dart'; // Assuming you have a ProfilePage widget
 import 'package:geolocator/geolocator.dart';
+import 'package:google_place/google_place.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({Key? key}) : super(key: key);
@@ -12,16 +13,30 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapState extends State<MapPage> {
-  // KEEP TRACK OF SELECTED INDEX
   int _selectedIndex = 1;
+  late GooglePlace googlePlace;
+  late TextEditingController _searchController;
+  List<AutocompletePrediction> _searchResults = [];
 
-  // ON TAP FUNCTION
+  @override
+  void initState() {
+    super.initState();
+    googlePlace = GooglePlace("YOUR_GOOGLE_PLACES_API_KEY_HERE");
+    _searchController = TextEditingController();
+    _searchController.addListener(_onSearchChanged);
+  }
+
+  void _onSearchChanged() async {
+    // Delay to avoid too many API requests while typing
+    await Future.delayed(Duration(milliseconds: 300));
+    _searchPlaces(_searchController.text);
+  }
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
 
-    // SWITCH TO SELECTED SCREEN BASED ON INDEX
     switch (index) {
       case 0:
         Navigator.push(
@@ -41,11 +56,22 @@ class _MapState extends State<MapPage> {
     }
   }
 
+  Future<void> _searchPlaces(String query) async {
+    if (query.isNotEmpty) {
+      final result = await googlePlace.autocomplete.get(query);
+      if (result != null && result.predictions != null) {
+        setState(() {
+          _searchResults = result.predictions!;
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        primarySwatch: Colors.blue, // Set the primary color to blue
+        primarySwatch: Colors.blue,
       ),
       home: Scaffold(
         backgroundColor: Color(0xFF272849),
@@ -62,29 +88,34 @@ class _MapState extends State<MapPage> {
                   onPressed: () {
                     showModalBottomSheet(
                       context: context,
-                      isScrollControlled:
-                          true, // Set to true to cover the entire width of the screen
+                      isScrollControlled: true,
                       builder: (BuildContext context) {
                         return Container(
                           height: 500,
-                          width:
-                              2000, // Set width to cover the entire width of the screen
+                          width: double.infinity,
                           child: Column(
                             children: [
                               TextField(
+                                controller: _searchController,
+                                onChanged: (value) {
+                                  _searchPlaces(value); // Trigger search when text changes
+                                },
                                 decoration: InputDecoration(
-                                  hintText: 'Search...',
+                                  hintText: 'Search places...',
                                   prefixIcon: Icon(Icons.search),
                                 ),
                               ),
                               Expanded(
                                 child: ListView.builder(
-                                  itemCount: 20, // Adjust as needed
+                                  shrinkWrap: true,
+                                  itemCount: _searchResults.length,
                                   itemBuilder: (context, index) {
+                                    var place = _searchResults[index];
                                     return ListTile(
-                                      title: Text('Item $index'),
+                                      title: Text(place.description ?? ''),
                                       onTap: () {
-                                        // Handle item tap
+                                        // Handle selection of place
+                                        Navigator.pop(context, place);
                                       },
                                     );
                                   },
@@ -101,8 +132,7 @@ class _MapState extends State<MapPage> {
                     shape: CircleBorder(),
                     padding: EdgeInsets.zero,
                   ),
-                  child: Icon(Icons.add,
-                      color: Colors.white), // Display "+" icon in yellow
+                  child: Icon(Icons.add, color: Colors.white),
                 ),
               ),
             ),
@@ -161,9 +191,7 @@ class _MapBackgroundState extends State<MapBackground> {
   Widget build(BuildContext context) {
     return GoogleMap(
       initialCameraPosition: CameraPosition(
-        target: currentLocation ??
-            LatLng(
-                0, 0), // Use current location if available, else set to default
+        target: currentLocation ?? LatLng(0, 0),
         zoom: 14,
       ),
       onMapCreated: (GoogleMapController controller) {
