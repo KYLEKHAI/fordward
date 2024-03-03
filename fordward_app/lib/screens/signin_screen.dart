@@ -74,7 +74,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   fillColor: Colors.white,
                 ),
                 style: TextStyle(
-                  color: Color(0xFFCBCBCB),
+                  color: Color.fromARGB(255, 0, 0, 0),
                 ),
                 keyboardType: TextInputType.emailAddress,
               )),
@@ -95,7 +95,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 fillColor: Colors.white,
               ),
               style: TextStyle(
-                color: Color(0xFFCBCBCB),
+                color: Color.fromARGB(255, 0, 0, 0),
               ),
 
               // HIDDEN PASSWORD INPUT

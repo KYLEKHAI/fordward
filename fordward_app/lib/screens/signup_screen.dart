@@ -67,7 +67,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             left: 20,
             right: 20,
             child: TextField(
-              controller: passwordController,
+              controller: nameController,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(20),
@@ -77,11 +77,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 fillColor: Colors.white,
               ),
               style: TextStyle(
-                color: Color(0xFFCBCBCB),
+                color: Color.fromARGB(255, 0, 0, 0),
               ),
-
-              // HIDDEN PASSWORD INPUT
-              obscureText: true,
             ),
           ),
 
@@ -101,7 +98,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   fillColor: Colors.white,
                 ),
                 style: TextStyle(
-                  color: Color(0xFFCBCBCB),
+                  color: Color.fromARGB(255, 0, 0, 0),
                 ),
                 keyboardType: TextInputType.emailAddress,
               )),
@@ -122,7 +119,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 fillColor: Colors.white,
               ),
               style: TextStyle(
-                color: Color(0xFFCBCBCB),
+                color: Color.fromARGB(255, 0, 0, 0),
               ),
 
               // HIDDEN PASSWORD INPUT
@@ -146,7 +143,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 fillColor: Colors.white,
               ),
               style: TextStyle(
-                color: Color(0xFFCBCBCB),
+                color: Color.fromARGB(255, 0, 0, 0),
               ),
 
               // HIDDEN PASSWORD INPUT
