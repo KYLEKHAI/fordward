@@ -20,14 +20,18 @@ class _MapState extends State<MapPage> {
   List<AutocompletePrediction> _searchResults = [];
   String? selectedAddress;
   String? currentAddress;
-  List<String> locations = ['123 Main St, Anytown, USA']; // Placeholder address
+  List<String> locations = [
+    '123 Main St, Anytown, USA',
+    '456 Oak Ave, Othertown, USA',
+    '789 Elm St, Another town, USA'
+  ]; // Placeholder addresses
   bool _isShowingFromToModal = false;
-
 
   @override
   void initState() {
     super.initState();
-    googlePlace = GooglePlace("AIzaSyBGNf2LpsgYGANiFn1Erm_a4c-A9p0GN7M");
+    googlePlace =
+        GooglePlace("YOUR_API_KEY_HERE");
     _searchController = TextEditingController();
     _searchController.addListener(_onSearchChanged);
     _getCurrentAddress();
@@ -261,6 +265,26 @@ class _MapState extends State<MapPage> {
                               ),
                             ),
                           ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.battery_full,
+                                  color: Colors.white,
+                                  size: 20,
+                                ),
+                                SizedBox(width: 5),
+                                Text(
+                                  '0%',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                           SizedBox(height: 10),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -269,7 +293,7 @@ class _MapState extends State<MapPage> {
                                 Icon(
                                   Icons.my_location,
                                   color: Colors.white,
-                                  size: 10,
+                                  size: 20,
                                 ),
                                 SizedBox(width: 5),
                                 Text(
