@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:fordward_app/screens/signup_screen.dart';
 import 'package:fordward_app/screens/signin_screen.dart';
+import 'package:model_viewer_plus/model_viewer_plus.dart';
 
 class TitlePage extends StatefulWidget {
   const TitlePage({super.key});
@@ -39,6 +40,20 @@ class _TitlePageState extends State<TitlePage> {
                   color: Colors.white,
                 ),
               ),
+            ),
+          ),
+          Positioned(
+            // 3D MODEL OF FORD CAR
+            top: 200,
+            left: 0,
+            right: 0,
+            bottom: 100,
+            child: ModelViewer(
+              src: 'images/ford_mustang_gt500.glb',
+              alt: "A 3D model of a Ford Mustang GT500",
+              ar: true,
+              autoRotate: true,
+              cameraControls: true,
             ),
           ),
           Positioned(
