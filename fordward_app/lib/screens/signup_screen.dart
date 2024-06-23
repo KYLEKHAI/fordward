@@ -157,16 +157,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
             right: 20,
             child: ElevatedButton(
               onPressed: () {
+                FirebaseAuth.instance
+                    .createUserWithEmailAndPassword(
+                        email: emailController.text,
+                        password: passwordController.text)
+                    .then((value) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => TitlePage()),
+                  );
+                }).onError((error, stackTrace) => null);
 
-                FirebaseAuth.instance.createUserWithEmailAndPassword(email: emailController.text, password: passwordController.text).then((value){
-                   Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => TitlePage()),
-                );
-                }).onError((error, stackTrace) => null)
-                ;
-
-                
                 // GO TO HOME SCREEN
                 /*Navigator.push(
                   context,
