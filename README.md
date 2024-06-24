@@ -1,19 +1,17 @@
 # Fordward
 
-Welcome to Forward App, a modern Flutter application designed to provide a seamless and intuitive user experience. This project leverages the powerful capabilities of Flutter to deliver a cross-platform application that runs smoothly on both Android and iOS devices.
+<strong>Fordward</strong> is a mobile application to help track and plan out EVs based on vehicle models designed by <strong>Ford</strong>. While taking a drive, this app allows you to locate nearby charging stations, monitor battery life, enjoy group listening with friends and much more!
 
-## Getting Started
+Take a leap forward with <strong>Fordward!</strong>
 
-To get started with Forward App, ensure you have Flutter installed on your machine. For detailed instructions, refer to the [Flutter installation guide](https://docs.flutter.dev/get-started/install).
+## Prerequisites
 
-### Prerequisites
-
+- Ensure Flutter is installed on your machine
 - Flutter SDK
 - Dart SDK
-- Android Studio or Visual Studio Code
-- An IDE or editor that supports Flutter development
+- Visual Studio Code or Andorid Studio
 
-### Installation
+## Installation
 
 Clone the repository to your local machine:
 
@@ -24,7 +22,7 @@ git clone https://github.com/KYLEKHAI/fordward.git
 Navigate to the project directory:
 
 ```sh
-cd forward_app
+cd forward
 ```
 
 Fetch all the dependencies:
@@ -35,49 +33,52 @@ flutter pub get
 
 Run the application:
 
-```sh
-flutter run
-```
+- In-Browser mode
+- Using a Virtual Machine/Emulator
 
 ## Features
 
-Describe the key features of your app.
-Highlight any unique functionalities.
+- **Account Management**: Maintain all your settings using our secure account management all within our app. Sign up for an account and sign in to access the app with a simple email and password combination.
+
+- **Dashboard**: The main screen which consist of a driver-friendly interface to applications and to monitor your environment.
+
+- **Settings**: Select options to avoid when navigating through the map. Set the battery threshold to efficiently save energy at a specific level. Cater the app towards your specific vehicle when choosing the model of various Ford vehicles.
+
+- **Real-time Map**: Integration with Google Maps allows for easy access in finding nearby charging stations with detailed information, including availability, charging speed, and compatibility with your EV model.
 
 <table>
-  <tr> 
-  <td><img src="./images/img1.png" width="200" height="auto"></td>
-  <td><img src="./images/img2.png" width="200" height="auto"></td> 
-  </tr>
-
+    <tr>
+    <td><img src="./images/img1.png" width="200" height="auto"></td>
+    <td><img src="./images/img2.png" width="200" height="auto"></td>
+    </tr>
+    <tr>
+      <td><img src="./images/img3.png" width="200" height="auto"></td>
+      <td><img src="./images/img4.png" width="200" height="auto"></td>
+    </tr>
+    <tr>
+      <td><img src="./images/img5.png" width="200" height="auto"></td>
+      <td><img src="./images/img6.png" width="200" height="auto"></td>
+    <td><img src="./images/img8.png" width="200" height="auto"></td>
+    </tr>
   <tr>
-    <td><img src="./images/img3.png" width="200" height="auto"></td>
-    <td><img src="./images/img4.png" width="200" height="auto"></td>
-  </tr>
+   <td><img src="./images/img9.png" width="200" height="auto"></td>
+    <td><img src="./images/img10.png" width="200" height="auto"></td></tr>
+  </table>
 
-  <tr>
-    <td><img src="./images/img5.png" width="200" height="auto"></td>
-    <td><img src="./images/img6.png" width="200" height="auto"></td>
-  <td><img src="./images/img8.png" width="200" height="auto"></td>
-  </tr>
-<tr>
- <td><img src="./images/img9.png" width="200" height="auto"></td>
-  <td><img src="./images/img10.png" width="200" height="auto"></td></tr>
-</table>
+## How it is built
 
-## Project Structure
-
-The project follows a standard Flutter project structure:
-
-lib/: Contains the Dart code of the application.
-android/ and ios/: Contains platform-specific code.
-test/: Contains the unit and widget tests.
-windows/, macos/, linux/, web/: Contains code to run your application on desktop and web platforms.
-Contributing
-We welcome contributions to Forward App! If you have suggestions or want to contribute code, please feel free to open an issue or submit a pull request.
+- Flutter Framework
+- Flutter Plugins (Geolocator, Model Viewer Plus)
+- Dart
+- HTML
+- C++
+- Google Play Services
+- Firebase
 
 ## Acknowledgments
 
-Mention any third-party libraries or resources you used.
-Acknowledge any contributors or sources of inspiration.
-Thank you for checking out Forward App. We hope you find it useful and look forward to seeing what you build with it!
+<em>This project is hosted by the hackathon <strong>uOttaHack6!</strong></em>
+
+<div align="center">
+    <img src="./images/img11.png" width="300" height="auto">
+</div>
