@@ -74,6 +74,8 @@ Run the application:
 - C++
 - Google Play Services
 - Firebase
+- Python
+- Flask
 
 ## Acknowledgments
 
